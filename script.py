@@ -21,12 +21,15 @@ def main():
     with open("sin-vals.csv") as f:
             content = f.readlines()
             content = [x.strip() for x in content]
-            print(content)
+            #print(content)
             for i in range(0,100):
                 if(i == 99):
                     string+= " "+ str(i) +" =>" + str(content[i]) + ");" '\n'
                 else:
-                    string+= " "+ str(i) +" =>" + str(content[i]) + "," + '\n'
+                    if(content[i]=='0'):
+                        string+= " "+ str(i) +" =>" + str('0.0') + "," + '\n'
+                    else:
+                        string+= " "+ str(i) +" =>" + str(content[i]) + "," + '\n'
                 
     process='''
     begin
@@ -35,9 +38,9 @@ def main():
          case address is
          '''
     string2 = ""
-    for i in range(0,99):
+    for i in range(0,100):
             string2 += "when "+'"'+ '{:07b}'.format(i)+'"' + " => data <= my_rom("+str(i)+");"+ '\n'
-    print(process+string2)
+   # print(process+string2)
     
     case ='''
            when "0000" => data <= my_rom(0);
@@ -58,7 +61,7 @@ def main():
            when "1111" => data <= my_rom(15);
            '''
     end = '''
-               when others => data <= "0.0";
+               when others => data <= 0.0;
                  end case;
           end process;
         end '''+ architectureName +''';
