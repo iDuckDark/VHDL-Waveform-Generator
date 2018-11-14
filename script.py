@@ -9,39 +9,36 @@ def main():
     use ieee.std_logic_1164.all;
 
     entity '''+ entityName +''' is
-      port ( address : in std_logic_vector(3 downto 0);
-             data : out std_logic_vector(7 downto 0) );
+      port ( address : in std_logic_vector(6 downto 0);
+             data : out real );
     end entity '''+ entityName +''';
 
     architecture '''+ architectureName +''' of '''+ entityName +''' is
-      type mem is array ( 0 to 2**7 - 1) of std_logic_vector(7 downto 0);
-      constant my_Rom : mem := (
+      type mem is array ( 0 to 99) of real;
+      constant my_rom : mem := (
       '''
-    rom = '''
-        0  => "00000000",
-        1  => "00000001",
-        2  => "00000010",
-        3  => "00000011",
-        4  => "00000100",
-        5  => "11110000",
-        6  => "11110000",
-        7  => "11110000",
-        8  => "11110000",
-        9  => "11110000",
-        10 => "11110000",
-        11 => "11110000",
-        12 => "11110000",
-        13 => "11110000",
-        14 => "11110000",
-        15 => "11110000");
-        '''
-    
+    string = ""
+    with open("sin-vals.csv") as f:
+            content = f.readlines()
+            content = [x.strip() for x in content]
+            print(content)
+            for i in range(0,100):
+                if(i == 99):
+                    string+= " "+ str(i) +" =>" + str(content[i]) + ");" '\n'
+                else:
+                    string+= " "+ str(i) +" =>" + str(content[i]) + "," + '\n'
+                
     process='''
     begin
        process (address)
        begin
          case address is
-    '''
+         '''
+    string2 = ""
+    for i in range(0,99):
+            string2 += "when "+'"'+ '{:07b}'.format(i)+'"' + " => data <= my_rom("+str(i)+");"+ '\n'
+    print(process+string2)
+    
     case ='''
            when "0000" => data <= my_rom(0);
            when "0001" => data <= my_rom(1);
@@ -61,18 +58,18 @@ def main():
            when "1111" => data <= my_rom(15);
            '''
     end = '''
-               when others => data <= "00000000";
+               when others => data <= "0.0";
                  end case;
           end process;
         end '''+ architectureName +''';
         '''
 
-    
-    f = open(filename, "a")
+
+    f = open(filename, "w")
     f.write(start)
-    f.write(rom)
+    f.write(string)
     f.write(process)
-    f.write(case)
+    f.write(string2)
     f.write(end)
     
 main()
