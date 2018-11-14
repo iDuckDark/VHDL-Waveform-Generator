@@ -23,7 +23,7 @@ begin
       elsif(clk'event and clk='1') then
         if(EN = '1') then 
           if(counter = "1100011") then
-            counter <="0000";
+            counter <="0000000";
           else 
             counter <= counter + 1;
           end if;
