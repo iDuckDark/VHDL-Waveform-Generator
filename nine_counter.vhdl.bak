@@ -25,8 +25,7 @@ begin
             r_reg <= r_next;
       end if;       
     end process;
-    r_next <=r_reg +1 when r_reg/="1100011" else
-    (others => '0');
+    r_next <=r_reg +1 when r_reg/="1100011";
     count <= std_logic_vector(r_reg);
     full <= '1' when (r_reg ="1100011") else
       '0';  
