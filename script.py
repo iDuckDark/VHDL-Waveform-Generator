@@ -26,9 +26,9 @@ def main():
                 if(i == 99):
                     string+= " "+ str(i) +" =>" + str(content[i]) + ");" '\n'
                 else:
-                    if(content[i]=='0'or '1'):
-                        string+= " "+ str(i) +" =>" + str(str(content[i])+'.0') + "," + '\n'
-                    else:
+##                    if(content[i]=='0'or '1'):
+##                        string+= " "+ str(i) +" =>" + str(str(content[i])+'.0') + "," + '\n'
+##                    else:
                         string+= " "+ str(i) +" =>" + str(content[i]) + "," + '\n'
                 
     process='''
