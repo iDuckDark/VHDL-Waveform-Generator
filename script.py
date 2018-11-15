@@ -18,7 +18,7 @@ def main():
       constant my_rom : mem := (
       '''
     string = ""
-    with open("sin-vals.csv") as f:
+    with open(csvfile) as f:
             content = f.readlines()
             content = [x.strip() for x in content]
             #print(content)
@@ -26,8 +26,8 @@ def main():
                 if(i == 99):
                     string+= " "+ str(i) +" =>" + str(content[i]) + ");" '\n'
                 else:
-                    if(content[i]=='0'):
-                        string+= " "+ str(i) +" =>" + str('0.0') + "," + '\n'
+                    if(content[i]=='0'or '1'):
+                        string+= " "+ str(i) +" =>" + str(str(content[i])+'.0') + "," + '\n'
                     else:
                         string+= " "+ str(i) +" =>" + str(content[i]) + "," + '\n'
                 
