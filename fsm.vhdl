@@ -6,13 +6,16 @@ entity clocked_fsm is
 		clk,reset : in std_logic;
 		start: in std_logic; -- start waveform generation
 		full: in std_logic; --Counter is Full
-		P: out std_logic; --Counter Toggle?
-		CC: out std_logic; -- Clear Clock
-		CS: out std_logic;
-		E: out std_logic;
-		LP: out std_logic
+		waveform_selector: in std_logic_vector(1 downto 0);
+		waveform_period: in std_logic_vector(1 downto 0);
+		waveform_datapoints: in std_logic_vector(1 downto 0);
+		P: out std_logic; --Counter Toggle
+		CC: out std_logic; -- Clear Counter
+		CS: out std_logic; --Clear state memory
+		EN: out std_logic; --Enable Memory
+		LP: out std_logic --Enable Data Latch
 	);
-end entity clocked_fsm;
+end clocked_fsm;
 
 architecture clocked_fsm_arch of clocked_fsm is
 	type waveform_state_type is (s0, s1, s2, s3);
@@ -21,7 +24,7 @@ begin
 	--State Register Logic
 	process(clk, reset)
 	begin
-		-- Active Low FSM Reset?
+		-- Active Low FSM Reset
 		if (reset = '0') 
 			then state_reg <=s0;
 		elsif (clk'event and clk ='1') 
@@ -35,7 +38,8 @@ begin
 		case state_reg is 
 			when s0 => 
 				if (start ='1') then state_next <= s1;
-				else then state_next <= s0; end if;
+				else state_next <= s0; 
+				end if;
 			when s1 => 
 				state_next <= s2;
 			when s2 => 
@@ -50,22 +54,21 @@ begin
 	begin
 		case state_reg is 
 			when s0 => 
-				P  <= 0;
-				CC <= 0;
-				CS <= 1;
-				EN <= 1;
-				LP <= 0;
+				P  <= '0';
+				CC <= '0';
+				CS <= '1';
+				EN <= '1';
+				LP <= '0';
 			when s1 => 
-				CC <= 1;
-				CS <= 1;
-				EN <= 1;			
+				CC <= '1';
+				CS <= '1';
+				EN <= '1';			
 			when s2 => 
-				LP <= 1; 
+				LP <= '1'; 
 			when s3 => 
-				LP <= 0;
-				EN <= 1;
+				LP <= '0';
+				EN <= '1';
 				P <= not clk;
 		end case;
 	end process;
-
-end architecture clocked_fsm_arch;
+end clocked_fsm_arch;
