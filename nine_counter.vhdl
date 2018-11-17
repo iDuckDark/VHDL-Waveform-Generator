@@ -3,19 +3,19 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity nine_counter is
-	port(
-		count: out std_logic_vector(6 downto 0);
-		--EN:in std_logic;
-		clk: in std_logic;
-		reset:in std_logic;
-		full: out std_logic
-		
-	);
+  port(
+    --EN:in std_logic;
+    clk: in std_logic;
+    reset:in std_logic;
+    full: out std_logic;
+    count: out std_logic_vector(6 downto 0)
+    
+  );
 end entity nine_counter;
 
 architecture counter_arch of nine_counter is
-  signal r_reg: unsigned(6 downto 0);
-  signal r_next: unsigned(6 downto 0);
+  signal r_reg: unsigned(6 downto 0) := "0000000";
+  signal r_next: unsigned(6 downto 0):= "0000000";
 begin
   process(clk, reset)
     begin 
