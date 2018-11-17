@@ -4,6 +4,7 @@ entity top is
 	port ( 
 			 CLOCK_50   : in std_logic;
 			 reset: in std_logic;
+			 wave: in std_logic_vector(1 downto 0);
 			  --KEY(0)=>RST and --KEY(1)=>EN
 		    val	    : out real
   	);
@@ -24,11 +25,17 @@ architecture top_arch of top is
 		);
 		end component;
 
-	component sin_entity
-      port ( address : in std_logic_vector(6 downto 0);
-             data : out real );
+	--component sin_entity
+ --     port ( address : in std_logic_vector(6 downto 0);
+ --            data : out real );
 
-	end component;
+	--end component;
+	component rom is
+	port ( wave_type : in std_logic_vector(1 downto 0);
+		address: in std_logic_vector(6 downto 0);
+	     value : out real 
+	     );
+	end component rom;
 
 	--signal F, F1, F2, F3, F4, G3, OP_A: std_logic_vector(7 downto 0);
 	--signal SEL: std_logic_vector(1 downto 0);
@@ -111,7 +118,7 @@ architecture top_arch of top is
 	--end component;
 begin
 	L0: nine_counter port map(CLOCK_50,reset,F1,F);
-	L1: sin_entity port map(F,F2);
+	L1: rom port map(wave,F,F2);
 	--L0: FSMctrl port map (CLOCK_50,  KEY(0), KEY(1), SW(17 downto 16), SEL, EN_1, EN_2);
 	--L1: D_8FF port map (CLOCK_50, EN_1, KEY(0), SW(7 downto 0), OP_A);
 	--L2: C1 port map (OP_A, SW(7 downto 0), F1);
