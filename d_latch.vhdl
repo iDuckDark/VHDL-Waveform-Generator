@@ -5,7 +5,7 @@ entity D_Latch is
 	port(
 		LP: in std_logic; --ENABLE D LATCH
 		d: in real; --DATA
-		q: out std_logic --OUTPUT
+		q: out real --OUTPUT
 	);
 end entity D_Latch;
 
@@ -19,4 +19,4 @@ begin
 		end if;
 	end process;
 	q<= q_latch;
-end architecture D_Latch
+end architecture D_Latch_Arch;
