@@ -4,13 +4,13 @@ use ieee.std_logic_1164.all;
 entity D_Latch is
 	port(
 		LP: in std_logic; --ENABLE D LATCH
-		d: in std_logic; --DATA
+		d: in real; --DATA
 		q: out std_logic --OUTPUT
 	);
 end entity D_Latch;
 
 architecture D_Latch_Arch of D_Latch is
-	signal q_latch: std_logic;
+	signal q_latch: real:=0.0;
 begin
 	process(LP, d, q_latch)
 	begin

@@ -15,7 +15,7 @@ end top;
 
 architecture top_arch of top is
 	signal address_sig: std_logic_vector(6 downto 0);
-	signal data_sig: std_logic_vector(6 downto 0);
+	signal data_sig: real;
 
 	signal F1: std_logic; 
 	signal F2: real;
@@ -28,7 +28,7 @@ architecture top_arch of top is
 	signal memoryEnable: std_logic; --EN
 
 	signal DEnable: std_logic; --LP
-	signal DOutput: std_logic; --Q
+	signal DOutput: real; --Q
 
 	component clocked_fsm is
 		port(
@@ -71,16 +71,16 @@ architecture top_arch of top is
 	component D_Latch is
 		port(
 			LP: in std_logic; --ENABLE D LATCH
-			d: in std_logic; --DATA
-			q: out std_logic --OUTPUT
+			d: in real; --DATA
+			q: out real --OUTPUT
 		);
 	end component D_Latch;
 
 begin
 	L0: clocked_fsm port map(CLOCK_50, reset, start, counterFull,wave_type, wave_period, wave_datapoints, counterEN, counterClear, memoryClear, memoryEnable, DEnable);
 	L1: nine_counter port map(counterEN, CLOCK_50, counterClear, counterFull, address_sig);
-	L2: rom port map(address_sig, CS, EN,wave_type, wave_period, wave_datapoints);
+	L2: rom port map(address_sig, memoryClear, memoryEnable,wave_type, wave_period, wave_datapoints);
 	L3: D_Latch port map(DEnable, data_sig,DOutput);
 	--LEDR(7 downto 0) <= G3;
-	val <= F2;
+	val <= DOutput;
 end top_arch;
