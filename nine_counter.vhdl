@@ -16,9 +16,9 @@ architecture counter_arch of nine_counter is
   signal r_reg: unsigned(6 downto 0) := "0000000";
   signal r_next: unsigned(6 downto 0):= "0000000";
 begin
-  process(clk, reset)
+  process(clk, CC)
     begin 
-      if(reset = '0') then 
+      if(CC = '0') then 
         r_reg <= (others => '0');
       elsif(clk'event and clk='1') then
         r_reg <= r_next;
