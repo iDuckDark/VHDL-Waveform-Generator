@@ -6,5 +6,5 @@ Ts = P/n;
 f = 1/P;
 x = 0:Ts:P-Ts;
 
-y = sin(2 * pi * f * x);
+y = sign(sin(2 * pi * f * x));
 stem(x,y)
