@@ -30,6 +30,8 @@ architecture top_arch of top is
 	signal DEnable: std_logic; --LP
 	signal DOutput: real; --Q
 
+	signal sender: std_logic:='0';
+
 	component clocked_fsm is
 		port(
 			clk,reset : in std_logic;
@@ -47,14 +49,17 @@ architecture top_arch of top is
 	end component;
 
 	component nine_counter
-		port(
-			start:in std_logic;
-	    	P:in std_logic; --ENABLE COUNTER
-		    clk: in std_logic;
-		    CC:in std_logic; --RESET COUNTER
-		    full: out std_logic;
-			address_bus: out std_logic_vector(6 downto 0)
-		);
+	  port(
+	    send: in std_logic;
+	    start:in std_logic;
+	    P:in std_logic; --ENABLE COUNTER
+	    clk: in std_logic;
+	    CC: in std_logic; --RESET COUNTER
+	    dataPoints: in std_logic_vector(1 downto 0); --0 means 100 sample rate -- 1 means 50 sample rate
+	    period: in std_logic_vector(1 downto 0); -- 00=1ms -- 01=0.01s -- 10=0.1s
+	    full: out std_logic;
+	    address_bus: out std_logic_vector(6 downto 0)
+	  );
 	end component;
 
 	component rom is
@@ -77,11 +82,25 @@ architecture top_arch of top is
 		);
 	end component D_Latch;
 
+	component waiter is
+	  port(
+	    start:in std_logic;
+	    P:in std_logic; --ENABLE COUNTER
+	    clk: in std_logic;
+	    CC: in std_logic; --RESET COUNTER
+	    dataPoints: in std_logic_vector(1 downto 0); --0 means 100 sample rate -- 1 means 50 sample rate
+	    period: in std_logic_vector(1 downto 0); -- 00=1ms -- 01=0.01s -- 10=0.1s
+	    max: out std_logic
+	  );
+	  end component waiter;
+
+
 begin
 	L0: clocked_fsm port map(CLOCK_50, reset, start, counterFull,wave_type, wave_period, wave_datapoints, counterEN, counterClear, memoryClear, memoryEnable, DEnable);
-	L1: nine_counter port map(start, counterEN, CLOCK_50, counterClear, counterFull, address_sig);
-	L2: rom port map(address_sig, memoryClear, memoryEnable,wave_type, wave_period, wave_datapoints,data_sig);
-	L3: D_Latch port map(DEnable, data_sig,DOutput);
+	L1: waiter port map(start,counterEN, CLOCK_50,counterClear,wave_datapoints,wave_period,sender);
+	L2: nine_counter port map(sender,start, counterEN, CLOCK_50, counterClear, wave_datapoints,wave_period,counterFull,address_sig);
+	L3: rom port map(address_sig, memoryClear, memoryEnable,wave_type, wave_period, wave_datapoints,data_sig);
+	L4: D_Latch port map(DEnable, data_sig,DOutput);
 	--LEDR(7 downto 0) <= G3;
 	val <= DOutput;
 end top_arch;
