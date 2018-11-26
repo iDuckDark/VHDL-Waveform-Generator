@@ -7,7 +7,7 @@ Ts = P/n;
 f = 1/P;
 x = 0:Ts:P-Ts;
 
-y = sin(2 * pi * f * x);
+y = square(2 * pi * f * x);
 stem(x,y)
 
 

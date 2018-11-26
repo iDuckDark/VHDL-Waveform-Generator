@@ -12,7 +12,7 @@ end entity square_entity;
 architecture square_arch of square_entity is
   type mem is array ( 0 to 99) of real;
   constant my_rom : mem := (
-    0 =>0.0,
+    0 =>1.0,
     1 =>1.0,
     2 =>1.0,
     3 =>1.0,
