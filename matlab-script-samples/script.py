@@ -46,6 +46,6 @@ def main():
     f.write(string)
     f.write(process)
     f.write(cases)
-    f.write(end_case)
+    f.write(end_end)
     
 main()
