@@ -41,13 +41,13 @@ BEGIN
 
 	--routing top
    uut: top PORT MAP(
-   		CLOCK_50 => CLOCK_50;
-   		reset => reset;
-   		start => start;
-   		wave_type => wave_type;
-   		wave_period => wave_period;
-   		wave_datapoints => wave_datapoints;
-   		val => val;
+   		CLOCK_50 => CLOCK_50,
+   		reset => reset,
+   		start => start,
+   		wave_type => wave_type,
+   		wave_period => wave_period,
+   		wave_datapoints => wave_datapoints,
+   		val => val
    	);
 
    
