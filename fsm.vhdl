@@ -6,6 +6,7 @@ entity clocked_fsm is
 		clk,reset : in std_logic;
 		start: in std_logic; -- start waveform generation
 		full: in std_logic; --Counter is Full
+		send: in std_logic;
 		waveform_selector: in std_logic_vector(1 downto 0);
 		waveform_period: in std_logic_vector(1 downto 0);
 		waveform_datapoints: in std_logic_vector(1 downto 0);
@@ -33,7 +34,7 @@ begin
 	end process;
 
 	--Next State Logic 
-	process(state_reg, start)
+	process(state_reg, start, send)
 	begin
 		case state_reg is 
 			when s0 => 
@@ -43,7 +44,11 @@ begin
 			when s1 => 
 				state_next <= s2;
 			when s2 => 
-				state_next <= s3;
+				if(send = '1') then
+					state_next <= s3;
+				else
+					state_next <= s2;
+				end  if;
 			when s3 => 
 				state_next <= s1;
 		end case;
@@ -60,9 +65,11 @@ begin
 				EN <= '1';
 				LP <= '0';
 			when s1 => 
+				P  <= '0';
 				CC <= '1';
-				CS <= '1';
-				EN <= '1';			
+				CS <= '0';
+				EN <= '0';
+				LP <= '0';			
 			when s2 => 
 				LP <= '1'; 
 			when s3 => 

@@ -17,9 +17,6 @@ architecture top_arch of top is
 	signal address_sig: std_logic_vector(6 downto 0);
 	signal data_sig: real;
 
-	--signal F1: std_logic; 
-	signal F2: real;
-
 	signal counterEN: std_logic; --P
 	signal counterClear: std_logic; --CC
 	signal counterFull: std_logic; --Full
@@ -37,6 +34,7 @@ architecture top_arch of top is
 			clk,reset : in std_logic;
 			start: in std_logic; -- start waveform generation
 			full: in std_logic; --Counter is Full
+			send: in std_logic; -- waiter
 			waveform_selector: in std_logic_vector(1 downto 0);
 			waveform_period: in std_logic_vector(1 downto 0);
 			waveform_datapoints: in std_logic_vector(1 downto 0);
@@ -96,7 +94,7 @@ architecture top_arch of top is
 
 
 begin
-	L0: clocked_fsm port map(CLOCK_50, reset, start, counterFull,wave_type, wave_period, wave_datapoints, counterEN, counterClear, memoryClear, memoryEnable, DEnable);
+	L0: clocked_fsm port map(CLOCK_50, reset, start, counterFull,sender,wave_type, wave_period, wave_datapoints, counterEN, counterClear, memoryClear, memoryEnable, DEnable);
 	L1: waiter port map(start,counterEN, CLOCK_50,counterClear,wave_datapoints,wave_period,sender);
 	L2: nine_counter port map(sender,start, counterEN, CLOCK_50, counterClear, wave_datapoints,wave_period,counterFull,address_sig);
 	L3: rom port map(address_sig, memoryClear, memoryEnable,wave_type, wave_period, wave_datapoints,data_sig);

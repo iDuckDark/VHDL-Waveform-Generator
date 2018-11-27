@@ -14,7 +14,7 @@ architecture D_Latch_Arch of D_Latch is
 begin
 	process(LP, d, q_latch)
 	begin
-		if (LP ='1') then q_latch <= d;
+		if (LP ='0') then q_latch <= d;
 		else q_latch <= q_latch;
 		end if;
 	end process;
