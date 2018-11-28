@@ -6,19 +6,20 @@ END FSMctrl_vhd_tst;
 
 ARCHITECTURE FSMctrl_arch OF FSMctrl_vhd_tst IS
 type test_vector is record
-   wave_type: std_logic_vector(1 downto 0);
-   wave_period: std_logic_vector(1 downto 0);
-   wave_datapoints: std_logic_vector(1 downto 0);
-   val: real;
+	reset: std_logic;
+	start: std_logic;
+	wave_type: std_logic_vector(1 downto 0);
+	wave_period: std_logic_vector(1 downto 0);
+	wave_datapoints: std_logic_vector(1 downto 0);
+	--val: real;
 end record;
 
 type test_vector_array is array (natural range <>) of test_vector;
-    constant test_vectors : test_vector_array := ( 
-          ("00", "00", "00", 0.0)
-
-        );  
-
    --define signals
+   constant test_vectors : test_vector_array := (
+   	('1','1',"00","00","00"),
+   	('1','0',"00","00","00")
+   	);  
    signal CLOCK_50 : std_logic := '0';
    constant clk_period_half : time := 10 ns;
 
@@ -58,7 +59,9 @@ BEGIN
 	test : process
 	begin
 		for i in 0 to 1 loop
-			
+
+			reset <= test_vectors(i).reset;
+			start <= test_vectors(i).start;
 			wave_period <= test_vectors(i).wave_period;
 			wave_type <= test_vectors(i).wave_type;
 			wave_datapoints <= test_vectors(i).wave_datapoints;
@@ -66,7 +69,7 @@ BEGIN
 			wait for 10 us;
 
 			assert(
-				(val = test_vectors(i).val)
+				(val = 5.0)
 			)
 			report "test_vector " & integer'image(i) & " failed "
 				severity error;
