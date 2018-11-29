@@ -13,7 +13,7 @@ type test_vector is record
 end record;
 
 type test_vector_array is array (natural range <>) of test_vector;
-   --define signals
+   --define array values for sin wave with period 1ms, 100 sample rate
    constant test_vectors : test_vector_array := (
 	("00","00","00",0.0),
 	("00","00","00",0.0627905195293134),
@@ -119,8 +119,8 @@ type test_vector_array is array (natural range <>) of test_vector;
    signal CLOCK_50 : std_logic := '0';
    constant clk_period_half : time := 10 ns;
 
-   signal reset: std_logic;
-   signal start: std_logic;
+   signal reset: std_logic:='1';
+   signal start: std_logic:='1';
    signal wave_type: std_logic_vector(1 downto 0);
    signal wave_period: std_logic_vector(1 downto 0);
    signal wave_datapoints: std_logic_vector(1 downto 0);
@@ -159,15 +159,13 @@ BEGIN
 		wave_type <= test_vectors(0).wave_type;
 		wave_datapoints <= test_vectors(0).wave_datapoints;
 		for i in 0 to 99 loop
-
-
-
+		  wait for 10 us;
 			assert(
 				(val = test_vectors(i).val)
 			)
 			report "test_vector " & integer'image(i) & " failed "
 				severity error;
-			wait for 10 us;
+			
 		end loop;
 	end process test;  
 
@@ -175,7 +173,10 @@ BEGIN
    -- Clock process definitions
    always :process
    begin
-		CLOCK_50 <= not CLOCK_50 after clk_period_half;
+		CLOCK_50 <= not CLOCK_50;
+		wait for 10 ns;
+		CLOCK_50 <= not CLOCK_50;
+		wait for 10 ns;
    end process;
 
 
