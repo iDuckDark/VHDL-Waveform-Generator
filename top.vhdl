@@ -1,5 +1,5 @@
-library ieee;
-use ieee.std_Logic_1164.all;
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
 
 entity top is
 	port ( 
@@ -92,13 +92,11 @@ architecture top_arch of top is
 	  );
 	  end component waiter;
 
-
 begin
 	L0: clocked_fsm port map(CLOCK_50, reset, start, counterFull,sender,wave_type, wave_period, wave_datapoints, counterEN, counterClear, memoryClear, memoryEnable, DEnable);
 	L1: waiter port map(start,counterEN, CLOCK_50,counterClear,wave_datapoints,wave_period,sender);
 	L2: nine_counter port map(sender,start, counterEN, CLOCK_50, counterClear, wave_datapoints,wave_period,counterFull,address_sig);
 	L3: rom port map(address_sig, memoryClear, memoryEnable,wave_type, wave_period, wave_datapoints,data_sig);
 	L4: D_Latch port map(DEnable, data_sig,DOutput);
-	--LEDR(7 downto 0) <= G3;
 	val <= DOutput;
 end top_arch;

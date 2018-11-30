@@ -1,5 +1,5 @@
-library ieee;
-use ieee.std_logic_1164.all;
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
 
 entity clocked_fsm is
 	port(
@@ -43,22 +43,18 @@ begin
 				end if;
 			when s1 => 
 				if (start ='0') then state_next <= s1;
-				else
-				state_next <= s2;
+				else state_next <= s2;
 				end if;
 			when s2 => 
 				if (start ='0') then state_next <= s2;
 				else
-					if(send = '1') then
-						state_next <= s3;
-					else
-						state_next <= s2;
+					if(send = '1') then state_next <= s3;
+					else state_next <= s2;
 					end  if;
 				end if;
 			when s3 => 
 				if (start ='0') then state_next <= s3;
-				else
-				state_next <= s1;
+				else state_next <= s1;
 				end if;
 		end case;
 	end process;
